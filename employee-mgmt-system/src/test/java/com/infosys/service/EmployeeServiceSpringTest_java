@@ -1,0 +1,36 @@
+package com.infosys.service;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.infosys.model.Employee;
+import com.infosys.repository.EmployeeRepository;
+
+@RunWith(SpringRunner.class)
+@WebMvcTest
+class EmployeeServiceSpringTest {
+	
+	@MockBean
+	private EmployeeRepository repository;
+	
+	@Autowired
+	private IEmployeeService service;
+
+	@Test
+	void testGetEmployees() {
+		when(repository.findAll()).thenReturn(Stream.of(new Employee(), new Employee()).collect(Collectors.toList()));
+		assertEquals(2, service.getEmployees(Optional.empty(), Optional.empty()).size());
+	}
+
+}
